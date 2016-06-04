@@ -16,9 +16,7 @@
 @property (strong, nonatomic) UICollectionView  *myCycleView;
 @property (strong, nonatomic) NSTimer  *timer;
 @property (strong, nonatomic) UIPageControl  *myPageC;
-// 定义当前页面的索引
 @property (strong, nonatomic) NSIndexPath  *indexPath;
-
 
 @end
 @implementation LJCycleImagesView
@@ -113,15 +111,15 @@
         return;
     }
     else{
-        NSIndexPath *index = [self.myCycleView indexPathsForVisibleItems].lastObject;
-        self.indexPath = index;
+        NSIndexPath *indexPath = [[self.myCycleView indexPathsForVisibleItems] lastObject];
+        self.indexPath = indexPath;
         [self scrollviewStop];
         [self timer];
     }
 }
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
-    NSIndexPath *index = [self.myCycleView indexPathsForVisibleItems].lastObject;
-    self.indexPath = index;
+    NSIndexPath *indexPath = [[self.myCycleView indexPathsForVisibleItems] lastObject];
+    self.indexPath = indexPath;
     [self scrollviewStop];
     [self timer];
 }
@@ -161,19 +159,15 @@
     NSIndexPath *indexPath = [[self.myCycleView indexPathsForVisibleItems] lastObject];
     // 如果当前不是最后一页就让它跳到下一页
     if (indexPath.item != self.imageUrlStringArray.count - 1) { // 如果不是最后一页
-        indexPath = [NSIndexPath indexPathForItem:indexPath.item + 1 inSection:1];
+        indexPath = [NSIndexPath indexPathForItem:indexPath.item + 1 inSection:indexPath.section];
         // 如果当前是第1组的最后一页了,我们继续让它走到第2组的第0
     } else {
-        indexPath = [NSIndexPath indexPathForItem:0 inSection:2];
+        indexPath = [NSIndexPath indexPathForItem:0 inSection:indexPath.section + 1];
     }
-    
-    
     // 动画去滚动cell
     [self.myCycleView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionLeft animated:YES];
-
-    // 保存当前页面索引
+    // 设置当前索引
     self.indexPath = indexPath;
-
     
 }
 // 开始拖拽的时候停止定时器
@@ -186,7 +180,6 @@
 -(void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView{
     [self scrollviewStop];
 }
-
 // 懒加载定时器
 - (NSTimer *)timer{
     if (_timer == nil) {
