@@ -113,11 +113,15 @@
         return;
     }
     else{
+        NSIndexPath *index = [self.myCycleView indexPathsForVisibleItems].lastObject;
+        self.indexPath = index;
         [self scrollviewStop];
         [self timer];
     }
 }
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
+    NSIndexPath *index = [self.myCycleView indexPathsForVisibleItems].lastObject;
+    self.indexPath = index;
     [self scrollviewStop];
     [self timer];
 }
