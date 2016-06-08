@@ -111,32 +111,23 @@
         return;
     }
     else{
-        NSIndexPath *indexPath = [[self.myCycleView indexPathsForVisibleItems] lastObject];
-        self.indexPath = indexPath;
         [self scrollviewStop];
         [self timer];
     }
 }
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
-    NSIndexPath *indexPath = [[self.myCycleView indexPathsForVisibleItems] lastObject];
-    self.indexPath = indexPath;
     [self scrollviewStop];
     [self timer];
 }
 
 // 当图片停下来以后做的判断
 - (void)scrollviewStop{
-    // 获取当前显示缩影
-    NSIndexPath *indexPath = self.indexPath;
-    
-    // 如果是在中间这一组的滚动就直接返回不走下面的滚动,只有不在第1组的时间才去不加动画的回到中间这一组
-    if (indexPath.section == 1) return;
-    
-    
-    // 创建一个新的索引,让它回到中间组所对应当前显示图片的cell
-    NSIndexPath *index = [NSIndexPath indexPathForItem:indexPath.item inSection:1];
-    
-    [self.myCycleView scrollToItemAtIndexPath:index atScrollPosition:UICollectionViewScrollPositionLeft animated:NO];
+    NSInteger index = self.myCycleView.contentOffset.x / [UIScreen mainScreen].bounds.size.width;
+    // 当前item
+    NSInteger currentItem = index % self.imageUrlStringArray.count;
+    NSIndexPath *indexPath = [NSIndexPath indexPathForItem:currentItem inSection:1];
+    // 滚动到第一组的当前item
+    [self.myCycleView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionNone animated:NO];
     
 }
 // 实现滚动的代理方法
@@ -144,7 +135,6 @@
     // 计算当前是第几页，并设置page的值
     // 获取当前scrollView中的内容滚动到什么位置了
     CGPoint offset = scrollView.contentOffset;
-    
     // 计算当前滚动到第几页 "通过内容水平方向滚动的位置 / scrollView得宽"
     NSInteger page = (offset.x +  KScrollViewW * 0.5) / KScrollViewW - self.imageUrlStringArray.count;
     if (page == self.imageUrlStringArray.count ) {
@@ -166,8 +156,6 @@
     }
     // 动画去滚动cell
     [self.myCycleView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionLeft animated:YES];
-    // 设置当前索引
-    self.indexPath = indexPath;
     
 }
 // 开始拖拽的时候停止定时器
@@ -184,8 +172,8 @@
 - (NSTimer *)timer{
     if (_timer == nil) {
         _timer = [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(nextPage) userInfo:nil repeats:YES];
-        // 开启运行循环
-        //        [[NSRunLoop mainRunLoop] addTimer:_timer forMode:NSRunLoopCommonModes];
+//         开启运行循环
+        [[NSRunLoop mainRunLoop] addTimer:_timer forMode:NSRunLoopCommonModes];
     }
     return _timer;
 }
