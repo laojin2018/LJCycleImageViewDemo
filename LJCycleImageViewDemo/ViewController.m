@@ -27,7 +27,7 @@
                                   @"http://image.tianjimedia.com/uploadImages/2015/059/18/I380XA478T4U.jpg",
                                   @"http://e.hiphotos.baidu.com/image/h%3D200/sign=c898bddf19950a7b6a3549c43ad0625c/14ce36d3d539b600be63e95eed50352ac75cb7ae.jpg"
                                   ];
-    [self.view LJ_setCycleImageViewWithFrame:CGRectMake(0, 0, 375, 600) andImageUrlStringArray:imagesURLStrings andPlaceHolderImage:[UIImage imageNamed:@"placeholder"]];
+    [self.view LJ_setCycleImageViewWithFrame:CGRectMake(0, 0, 375, 600) andImageUrlStringArray:imagesURLStrings andPlaceHolderImage:[UIImage imageNamed:@"placeholder"] andIsAutoCycle:YES];
 }
 
 - (void)didReceiveMemoryWarning {

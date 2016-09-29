@@ -10,9 +10,9 @@
 #import "LJCycleImagesView.h"
 
 @implementation UIView (LJCycleImageView)
--(void)LJ_setCycleImageViewWithFrame:(CGRect)frame andImageUrlStringArray:(NSArray *)imageUrlStringArray andPlaceHolderImage:(UIImage *)holderImage{
+-(void)LJ_setCycleImageViewWithFrame:(CGRect)frame andImageUrlStringArray:(NSArray *)imageUrlStringArray andPlaceHolderImage:(UIImage *)holderImage andIsAutoCycle:(BOOL) isAutoCycle{
     // 创建轮播器
-    LJCycleImagesView *cycleImageView = [[LJCycleImagesView alloc] initWithFrame:frame andImageUrlStringArray:imageUrlStringArray andPlaceHolderImage:holderImage];
+    LJCycleImagesView *cycleImageView = [[LJCycleImagesView alloc] initWithFrame:frame andImageUrlStringArray:imageUrlStringArray andPlaceHolderImage:holderImage andIsAutoCycle:isAutoCycle];
     // 将轮播器添加到调用的view上
     [self addSubview:cycleImageView];
 

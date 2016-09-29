@@ -17,7 +17,10 @@
 // 占位图片
 @property (strong, nonatomic) UIImage  *placeHolderImage;
 
+
+
+
 // 提供初始化方法
-- (instancetype)initWithFrame:(CGRect)frame andImageUrlStringArray:(NSArray *)imageUrlStringArray andPlaceHolderImage:(UIImage *)holderImage;
+- (instancetype)initWithFrame:(CGRect)frame andImageUrlStringArray:(NSArray *)imageUrlStringArray andPlaceHolderImage:(UIImage *)holderImage andIsAutoCycle:(BOOL)isAutoCycle;
 
 @end

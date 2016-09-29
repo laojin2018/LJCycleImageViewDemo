@@ -8,8 +8,9 @@
 #import "LJCycleImagesView.h"
 #import "LJCycleCell.h"
 #import "UIImageView+WebCache.h"
+#import <UIKit/UIKit.h>
 
-#define KScrollViewW self.bounds.size.width
+CGFloat viewWidth;
 
 @interface LJCycleImagesView ()<UICollectionViewDataSource,UICollectionViewDelegate,UIScrollViewDelegate>
 
@@ -21,9 +22,12 @@
 @end
 @implementation LJCycleImagesView
 // 实现自定义初始化方法
--(instancetype)initWithFrame:(CGRect)frame andImageUrlStringArray:(NSArray *)imageUrlStringArray andPlaceHolderImage:(UIImage *)holderImage{
+-(instancetype)initWithFrame:(CGRect)frame andImageUrlStringArray:(NSArray *)imageUrlStringArray andPlaceHolderImage:(UIImage *)holderImage andIsAutoCycle:(BOOL)isAutoCycle{
     self = [super initWithFrame:frame];
     if (self) {
+        
+        viewWidth = frame.size.width;
+        
         // 创建轮播视图
         [self setCycleViewWithFrame:frame];
         // 创建pageController
@@ -39,7 +43,9 @@
         self.myPageC.numberOfPages = self.imageUrlStringArray.count;
         self.myPageC.currentPage = 0;
         // 添加定时器
-        [self timer];
+        if (isAutoCycle) {
+            [self timer];
+        }
         // 默认滚动到第一组的第一张
         NSIndexPath *indexPath = [NSIndexPath indexPathForItem:0 inSection:1];
         [self.myCycleView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionNone animated:NO];
@@ -122,7 +128,7 @@
 
 // 当图片停下来以后做的判断
 - (void)scrollviewStop{
-    NSInteger index = self.myCycleView.contentOffset.x / [UIScreen mainScreen].bounds.size.width;
+    NSInteger index = self.myCycleView.contentOffset.x / viewWidth;
     // 当前item
     NSInteger currentItem = index % self.imageUrlStringArray.count;
     NSIndexPath *indexPath = [NSIndexPath indexPathForItem:currentItem inSection:1];
@@ -136,17 +142,19 @@
     // 获取当前scrollView中的内容滚动到什么位置了
     CGPoint offset = scrollView.contentOffset;
     // 计算当前滚动到第几页 "通过内容水平方向滚动的位置 / scrollView得宽"
-    NSInteger page = (offset.x +  KScrollViewW * 0.5) / KScrollViewW - self.imageUrlStringArray.count;
+    NSInteger page = (offset.x +  viewWidth * 0.5) / viewWidth - self.imageUrlStringArray.count;
     if (page == self.imageUrlStringArray.count ) {
         page = 0;
     }
     
+    NSLog(@"page:%zd",page);
     self.myPageC.currentPage = page;
     
 }
 // 实现自动滚动的方法
 - (void)nextPage{
-    NSIndexPath *indexPath = [[self.myCycleView indexPathsForVisibleItems] lastObject];
+//    NSIndexPath *indexPath = [[self.myCycleView indexPathsForVisibleItems] lastObject];
+    NSIndexPath *indexPath = [NSIndexPath indexPathForItem:self.myPageC.currentPage inSection:1];
     // 如果当前不是最后一页就让它跳到下一页
     if (indexPath.item != self.imageUrlStringArray.count - 1) { // 如果不是最后一页
         indexPath = [NSIndexPath indexPathForItem:indexPath.item + 1 inSection:indexPath.section];

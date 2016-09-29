@@ -10,5 +10,5 @@
 
 @interface UIView (LJCycleImageView)
 // 通过view的分类方法，实现一句话添加轮播器的功能
-- (void)LJ_setCycleImageViewWithFrame:(CGRect)frame andImageUrlStringArray:(NSArray *)imageUrlStringArray andPlaceHolderImage:(UIImage *)holderImage;
+- (void)LJ_setCycleImageViewWithFrame:(CGRect)frame andImageUrlStringArray:(NSArray *)imageUrlStringArray andPlaceHolderImage:(UIImage *)holderImage andIsAutoCycle:(BOOL) isAutoCycle;
 @end
